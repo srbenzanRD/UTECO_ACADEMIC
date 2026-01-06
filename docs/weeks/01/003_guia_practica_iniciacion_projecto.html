@@ -8,6 +8,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <!-- Highlight.js for Code Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script>hljs.highlightAll();</script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -89,7 +95,7 @@
             <p>Para crear un proyecto Blazor que utilice el modo de renderizado <strong>Server</strong> de forma interactiva y que incluya soporte para <strong>Entity Framework Core</strong> con <strong>Autenticación Individual</strong>, ejecutamos el siguiente comando en la terminal:</p>
             
             <div class="code-block">
-<pre><code>dotnet new blazor -o MiProyectoAcademico -int Server -au Individual</code></pre>
+<pre><code class="language-bash">dotnet new blazor -o MiProyectoAcademico -int Server -au Individual</code></pre>
             </div>
 
             <h5>Explicación de los parámetros:</h5>
@@ -105,7 +111,7 @@
             <p>Una vez creado el proyecto, debemos verificar que tenemos las herramientas de EF Core instaladas y aplicar la migración inicial para crear la base de datos de identidad.</p>
             
             <div class="code-block">
-<pre><code># Instalar herramientas de EF si no las tienes
+<pre><code class="language-bash"># Instalar herramientas de EF si no las tienes
 dotnet tool install --global dotnet-ef
 
 # Agregar migración inicial especificando el directorio de salida
@@ -127,7 +133,7 @@ dotnet ef database update</code></pre>
             <p>Finalmente, iniciamos la aplicación para verificar que el sistema de autenticación y los componentes interactivos funcionan correctamente.</p>
             
             <div class="code-block">
-<pre><code>dotnet watch run</code></pre>
+<pre><code class="language-bash">dotnet watch run</code></pre>
             </div>
             <p>Al abrir la aplicación en el navegador, verás los enlaces de <strong>Register</strong> y <strong>Login</strong> en la parte superior derecha, lo cual confirma que Identity se configuró exitosamente.</p>
         </section>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración del Entorno: .NET 8 SDK</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <!-- Highlight.js for Code Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #512bd4; /* Blazor Purple */
+            font-weight: 700;
+        }
+        .header-banner h1 {
+            color: white;
+        }
+        .header-banner {
+            background: linear-gradient(135deg, #512bd4 0%, #3a1c99 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 5px solid #00bcd4;
+        }
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .info-card {
+            background: white;
+            border-top: 5px solid #512bd4;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+        }
+        .os-badge {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .bg-windows { background-color: #00a4ef; color: white; }
+        .bg-linux { background-color: #fcc624; color: black; }
+        footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header-banner">
+        <div class="container">
+            <h1 class="display-4">Instalación de .NET 8</h1>
+            <p class="lead">Preparando el entorno para el desarrollo con Blazor Server</p>
+            <div class="d-flex gap-3">
+                <span class="badge bg-light text-dark">SDK 8.0</span>
+                <span class="badge bg-info text-dark">VS Code</span>
+                <span class="badge bg-primary">VS 2022</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Opción 1: Visual Studio Code -->
+        <section class="mb-5">
+            <div class="d-flex align-items-center mb-3">
+                <h2 class="mb-0">Opción 1: Visual Studio Code</h2>
+                <span class="badge bg-secondary ms-3">Ligero y Multiplataforma</span>
+            </div>
+            <p>Ideal para quienes prefieren un editor rápido y moderno. Requiere la instalación manual del SDK.</p>
+
+            <div class="row">
+                <!-- Windows -->
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h5><span class="os-badge bg-windows">Windows</span> Pasos a seguir:</h5>
+                        <ol>
+                            <li>Descarga el <strong>.NET 8 SDK x64</strong> desde <a href="https://dotnet.microsoft.com/download/dotnet/8.0" target="_blank">dotnet.microsoft.com</a>.</li>
+                            <li>Ejecuta el instalador <code>.exe</code> y sigue las instrucciones.</li>
+                            <li>Instala <strong>VS Code</strong>.</li>
+                            <li>En VS Code, instala la extensión <strong>C# Dev Kit</strong> (Microsoft).</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- Linux -->
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h5><span class="os-badge bg-linux">Linux (Ubuntu/Debian)</span> Comandos:</h5>
+                        <p>Abre tu terminal y ejecuta:</p>
+                        <div class="code-block" style="padding: 1rem;">
+<pre><code class="language-bash"># Instalar el SDK de .NET 8
+sudo apt-get update
+sudo apt-get install -y dotnet-sdk-8.0
+
+# Verificar instalación
+dotnet --version</code></pre>
+                        </div>
+                        <p class="small text-muted">Nota: Para otras distribuciones, consulta la documentación oficial de Microsoft.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Opción 2: Visual Studio -->
+        <section class="mb-5">
+            <div class="d-flex align-items-center mb-3">
+                <h2>Opción 2: Visual Studio 2022 / 2026 Community</h2>
+                <span class="badge bg-primary ms-3">Windows Only</span>
+            </div>
+            <div class="info-card">
+                <p>Es el IDE (Entorno de Desarrollo Integrado) completo y más robusto para .NET en Windows.</p>
+                <h5>Pasos para la instalación:</h5>
+                <ol>
+                    <li>Descarga <strong>Visual Studio Installer</strong> desde el sitio oficial.</li>
+                    <li>Selecciona la versión <strong>Community</strong> (Gratuita para estudiantes).</li>
+                    <li><strong>IMPORTANTE:</strong> En la pestaña de "Cargas de trabajo" (Workloads), marca la casilla:
+                        <br>
+                        <strong class="text-primary">"Desarrollo de ASP.NET y web" (ASP.NET and web development)</strong>.
+                    </li>
+                    <li>Asegúrate de que en los componentes individuales esté marcado <strong>.NET 8.0 Runtime/SDK</strong>.</li>
+                    <li>Haz clic en Instalar y espera a que finalice el proceso.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Verificación Final -->
+        <section class="mb-5">
+            <div class="alert alert-info">
+                <h4>✅ Verificación de la instalación</h4>
+                <p>Para confirmar que todo está listo, abre una terminal (CMD, PowerShell o Terminal de Linux) y escribe:</p>
+                <div class="code-block" style="max-width: 400px; margin: 10px 0;">
+<pre><code class="language-bash">dotnet --info</code></pre>
+                </div>
+                <p class="mb-0">Deberías ver una lista detallada que incluya <code>"8.0.xxx"</code> en la sección de SDKs instalados.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Universidad Tecnológica del Cibao Oriental (UTECO)</p>
+            <p><strong>Maestro:</strong> Felix R. Benzan | <a href="https://www.felixbenzan.com.do" class="text-white">www.felixbenzan.com.do</a></p>
+        </div>
+    </footer>
+
+</body>
+</html>

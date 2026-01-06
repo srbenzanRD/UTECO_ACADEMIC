@@ -10,6 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
     <!-- Mermaid JS for Diagrams -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <!-- Highlight.js for Code Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+    <script>hljs.highlightAll();</script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -177,7 +183,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="code-block">
-<pre><code>@page "/contador"
+<pre><code class="language-csharp">@page "/contador"
 
 &lt;h1&gt;Contador: @conteoActual&lt;/h1&gt;
 
@@ -195,6 +201,7 @@
     }
 }</code></pre>
                     </div>
+                    <p class="text-muted small"><em>Nota: Este ejemplo muestra la reactividad de Blazor. Al presionar el botón, el servidor incrementa la variable y solo envía el cambio del número al navegador.</em></p>
                 </div>
                 <div class="col-lg-6">
                     <h5>Desglose del Código:</h5>
@@ -215,7 +222,27 @@
                 <strong>Concepto Vital:</strong> En lugar de crear objetos con <code>new Servicio()</code> dentro de los componentes, le pedimos al sistema que nos los dé. Esto desacopla el código.
             </div>
 
-            <p>En Blazor Server, el ciclo de vida de los servicios es crítico porque la memoria está en el servidor.</p>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h4>🛠️ ¿Qué es una Interfaz?</h4>
+                    <p>Una <strong>Interfaz</strong> (<code>interface</code>) es un contrato. No contiene la lógica, solo define "qué" debe hacer una clase, pero no "cómo" lo hace. En C# se nombran con una 'I' al principio (ej: <code>IEstudianteService</code>).</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="concept-card">
+                        <h5>🔗 El rol de la Interfaz en DI</h5>
+                        <p>Cuando inyectamos dependencias, le pedimos al componente que dependa de la <strong>interfaz</strong> y no de la clase concreta. Esto permite cambiar la implementación (ej: de una BD real a una de prueba) sin tocar el código del componente.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <h6>Registro en Program.cs:</h6>
+<pre><code class="language-csharp">// "Le digo al sistema: Cuando alguien pida IEstudianteService, dale EstudianteService"
+builder.Services.AddScoped&lt;IEstudianteService, EstudianteService&gt;();</code></pre>
+            </div>
+            <p class="text-muted small"><em>Nota: Al usar interfaces, nuestro código es mucho más flexible y fácil de probar (Testing).</em></p>
+
+            <p class="mt-4">En Blazor Server, el ciclo de vida de los servicios es crítico porque la memoria está en el servidor.</p>
 
             <table class="table table-bordered table-hover bg-white">
                 <thead class="table-dark">
@@ -267,11 +294,12 @@
 
             <div class="code-block">
                 <h6>Ejemplo de consulta LINQ en Blazor:</h6>
-<pre><code>// Usando Inyección de Dependencias para obtener el contexto
+<pre><code class="language-cs">// Usando Inyección de Dependencias para obtener el contexto
 var estudiantes = await _context.Estudiantes
     .Where(e => e.Activo)
     .ToListAsync();</code></pre>
             </div>
+            <p class="text-muted small"><em>Nota: LINQ traduce este código de C# a una consulta SQL optimizada de forma automática, permitiéndonos trabajar con entidades en lugar de strings de texto.</em></p>
         </section>
 
         <!-- Sección 6: Autenticación y Autorización -->
@@ -290,7 +318,7 @@ var estudiantes = await _context.Estudiantes
                 </div>
                 <div class="col-lg-5">
                     <div class="code-block">
-<pre><code>&lt;AuthorizeView&gt;
+<pre><code class="language-html">&lt;AuthorizeView&gt;
     &lt;Authorized&gt;
         &lt;p&gt;Hola, @context.User.Identity.Name&lt;/p&gt;
     &lt;/Authorized&gt;
@@ -299,6 +327,7 @@ var estudiantes = await _context.Estudiantes
     &lt;/NotAuthorized&gt;
 &lt;/AuthorizeView&gt;</code></pre>
                     </div>
+                    <p class="text-muted small"><em>Nota: &lt;AuthorizeView&gt; es un componente declarativo que oculta o muestra fragmentos de UI basados en el estado de autenticación del usuario sin necesidad de condicionales complejos en C#.</em></p>
                 </div>
             </div>
         </section>
@@ -306,9 +335,10 @@ var estudiantes = await _context.Estudiantes
         <!-- Conclusión -->
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading">Resumen de la Sesión</h4>
-            <p>Hoy aprendimos que Blazor Server ejecuta C# en el servidor y actualiza la UI vía SignalR. Entendimos la estructura de archivos que nos da .NET 8 y cómo un archivo <code>.razor</code> une HTML y C# limpiamente. Finalmente, vimos que la Inyección de Dependencias (especialmente <code>Scoped</code>) es el motor que mueve los datos en nuestra aplicación.</p>
+            <p>Hoy exploramos la arquitectura de <strong>Blazor Server</strong>, comprendiendo cómo la renderización en el servidor y el uso de <strong>SignalR</strong> permiten aplicaciones web interactivas y fluidas usando C#. Analizamos la <strong>anatomía de un proyecto .NET 8</strong> y la versatilidad de los <strong>componentes Razor</strong> que unen lógica y diseño.</p>
+            <p>Profundizamos en conceptos avanzados de arquitectura como el uso de <strong>Interfaces</strong> para lograr un código desacoplado y mantenible a través de la <strong>Inyección de Dependencias (DI)</strong>. Finalmente, introdujimos <strong>Entity Framework Core</strong> como nuestro motor de acceso a datos y <strong>ASP.NET Core Identity</strong> como la solución robusta para gestionar la autenticación y seguridad de nuestros usuarios.</p>
             <hr>
-            <p class="mb-0"><strong>Siguiente paso:</strong> En el laboratorio configuraremos VS 2022 y crearemos nuestra primera solución.</p>
+            <p class="mb-0"><strong>Siguiente paso:</strong> En el laboratorio configuraremos nuestro entorno de desarrollo y crearemos una solución completa que integre todos estos pilares.</p>
         </div>
 
     </div>
@@ -316,7 +346,7 @@ var estudiantes = await _context.Estudiantes
     <footer>
         <div class="container">
             <p>Universidad Tecnológica del Cibao Oriental (UTECO)</p>
-            <p>Docente: srbenzanRD | <a href="https://www.felixbenzan.com.do" class="text-white">www.felixbenzan.com.do</a></p>
+            <p><strong>Maestro:</strong> Felix R. Benzan | <a href="https://www.felixbenzan.com.do" class="text-white">www.felixbenzan.com.do</a></p>
         </div>
     </footer>
 

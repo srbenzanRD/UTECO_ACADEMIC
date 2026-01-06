@@ -1,4 +1,5 @@
-# Plan de Clase: Lenguaje de Programación III (IRI-005) - UTECO 2026
+# Universidad Tecnologica del Cibao Oriental 
+# Programa de clase: Lenguaje de Programación III (IRI-005)
 
 **Asignatura:** Lenguaje de Programación III  
 **Tecnología:** .NET 8, Blazor Server, EF Core, SQL Server  
