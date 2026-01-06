@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 1: Arquitectura Blazor Server</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <!-- Mermaid JS for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #512bd4; /* Blazor Purple */
+            font-weight: 700;
+        }
+        .header-banner {
+            background: linear-gradient(135deg, #512bd4 0%, #3a1c99 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 5px solid #00bcd4;
+        }
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .concept-card {
+            background: white;
+            border-left: 5px solid #512bd4;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+        }
+        .file-structure ul {
+            list-style-type: none;
+        }
+        .file-structure li::before {
+            content: "📄 ";
+        }
+        .file-structure li.folder::before {
+            content: "📁 ";
+        }
+        .important-note {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header-banner">
+        <div class="container">
+            <h1 class="display-4">Lenguaje de Programación III</h1>
+            <p class="lead">Semana 1: Introducción a la Arquitectura Blazor Server</p>
+            <div class="d-flex gap-3">
+                <span class="badge bg-info text-dark">IRI-005</span>
+                <span class="badge bg-warning text-dark">Teoría</span>
+                <span class="badge bg-light text-dark">.NET 8</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Sección 1: El Problema y la Solución -->
+        <section class="mb-5">
+            <h2>1. ¿Qué es Blazor Server?</h2>
+            <p class="lead">Blazor nos permite construir interfaces web interactivas usando <strong>C# en lugar de JavaScript</strong>.</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="concept-card">
+                        <h4>🌍 Web Tradicional (MVC)</h4>
+                        <p>El servidor envía HTML completo cada vez. Si haces clic, la página se recarga. Es lento para la experiencia de usuario.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="concept-card">
+                        <h4>⚡ Blazor Server</h4>
+                        <p>El servidor mantiene una conexión abierta con el navegador. Solo envía las diferencias (diffs) del DOM. Se siente como una app de escritorio.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-dark text-white">Arquitectura: El Circuito SignalR</div>
+                <div class="card-body text-center">
+                    <div class="mermaid">
+                        graph LR
+                            Browser["🌐 Navegador (Cliente)"] -- "Eventos UI (Click)" --> SignalR["📡 SignalR (WebSocket)"]
+                            SignalR -- "Procesa C#" --> Server["🖥️ Servidor (.NET Core)"]
+                            Server -- "Diferencias DOM (Render Tree)" --> SignalR
+                            SignalR --> Browser
+                    </div>
+                    <p class="text-muted mt-2"><small>Diagrama de comunicación en tiempo real</small></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: Estructura del Proyecto -->
+        <section class="mb-5">
+            <h2>2. Anatomía de un Proyecto .NET 8</h2>
+            <p>Al crear un proyecto Blazor Web App, esta es la estructura que encontraremos. Es vital entender dónde va cada cosa.</p>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="concept-card file-structure">
+                        <h5>📂 Estructura de Archivos</h5>
+                        <ul>
+                            <li class="folder"><strong>Properties/launchSettings.json</strong>: Configura puertos y perfiles.</li>
+                            <li class="folder"><strong>wwwroot</strong>: CSS, Imágenes, JS estático.</li>
+                            <li class="folder"><strong>Components</strong>
+                                <ul>
+                                    <li class="folder"><strong>Layout</strong>: Plantillas (MainLayout).</li>
+                                    <li class="folder"><strong>Pages</strong>: Vistas (Home, Counter).</li>
+                                    <li>_Imports.razor</li>
+                                    <li>App.razor</li>
+                                    <li>Routes.razor</li>
+                                </ul>
+                            </li>
+                            <li><strong>appsettings.json</strong>: Cadenas de conexión a BD.</li>
+                            <li><strong>Program.cs</strong>: El punto de entrada.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <h4>Archivos Clave:</h4>
+                    <dl class="row">
+                        <dt class="col-sm-3">Program.cs</dt>
+                        <dd class="col-sm-9">Aquí se configura la Inyección de Dependencias, la conexión a SQL Server y los servicios de Blazor.</dd>
+
+                        <dt class="col-sm-3">App.razor</dt>
+                        <dd class="col-sm-9">Es el componente raíz. Define la estructura HTML base y carga el Router.</dd>
+
+                        <dt class="col-sm-3">_Imports.razor</dt>
+                        <dd class="col-sm-9">Todo <code>using</code> que pongas aquí será visible en todos los componentes del proyecto. Evita repetir código.</dd>
+
+                        <dt class="col-sm-3">MainLayout.razor</dt>
+                        <dd class="col-sm-9">Define el diseño compartido (Menú lateral, Pie de página) que usan todas las páginas.</dd>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 3: Componentes Razor -->
+        <section class="mb-5">
+            <h2>3. Componentes Razor (.razor)</h2>
+            <p>Un componente en Blazor es una mezcla de <strong>HTML</strong> y lógica <strong>C#</strong>. Se compilan como clases de C#.</p>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="code-block">
+<pre><code>@page "/contador"
+
+&lt;h1&gt;Contador: @conteoActual&lt;/h1&gt;
+
+&lt;button class="btn btn-primary" @onclick="Incrementar"&gt;
+    Click aquí
+&lt;/button&gt;
+
+@code {
+    // Esto es C# puro
+    private int conteoActual = 0;
+
+    private void Incrementar()
+    {
+        conteoActual++;
+    }
+}</code></pre>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h5>Desglose del Código:</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>@page "/ruta":</strong> Define cómo llegar a esta página desde el navegador.</li>
+                        <li class="list-group-item"><strong>@variable:</strong> Imprime el valor de C# en el HTML (Data Binding).</li>
+                        <li class="list-group-item"><strong>@onclick:</strong> Vincula el evento click del botón con un método C#.</li>
+                        <li class="list-group-item"><strong>@code { ... }:</strong> Bloque donde escribimos la lógica, variables y métodos.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 4: Inyección de Dependencias -->
+        <section class="mb-5">
+            <h2>4. Inyección de Dependencias (DI)</h2>
+            <div class="important-note">
+                <strong>Concepto Vital:</strong> En lugar de crear objetos con <code>new Servicio()</code> dentro de los componentes, le pedimos al sistema que nos los dé. Esto desacopla el código.
+            </div>
+
+            <p>En Blazor Server, el ciclo de vida de los servicios es crítico porque la memoria está en el servidor.</p>
+
+            <table class="table table-bordered table-hover bg-white">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Tiempo de Vida</th>
+                        <th>Descripción</th>
+                        <th>Uso Recomendado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Transient</strong></td>
+                        <td>Se crea una instancia nueva cada vez que se solicita.</td>
+                        <td>Servicios ligeros sin estado.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scoped</strong> <span class="badge bg-danger">¡Importante!</span></td>
+                        <td>Se crea una vez por conexión de usuario (Circuito SignalR).</td>
+                        <td>Repositorios de BD, Servicios de Usuario, Carrito de Compra.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Singleton</strong></td>
+                        <td>Una única instancia para TODOS los usuarios del servidor.</td>
+                        <td>Caché global, Configuración.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Conclusión -->
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Resumen de la Sesión</h4>
+            <p>Hoy aprendimos que Blazor Server ejecuta C# en el servidor y actualiza la UI vía SignalR. Entendimos la estructura de archivos que nos da .NET 8 y cómo un archivo <code>.razor</code> une HTML y C# limpiamente. Finalmente, vimos que la Inyección de Dependencias (especialmente <code>Scoped</code>) es el motor que mueve los datos en nuestra aplicación.</p>
+            <hr>
+            <p class="mb-0"><strong>Siguiente paso:</strong> En el laboratorio configuraremos VS 2022 y crearemos nuestra primera solución.</p>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Universidad Tecnológica del Cibao Oriental (UTECO)</p>
+            <p>Docente: srbenzanRD | <a href="https://www.felixbenzan.com.do" class="text-white">www.felixbenzan.com.do</a></p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+</body>
+</html>
