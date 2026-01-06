@@ -20,6 +20,9 @@
             color: #512bd4; /* Blazor Purple */
             font-weight: 700;
         }
+        .header-banner h1 {
+            color: white;
+        }
         .header-banner {
             background: linear-gradient(135deg, #512bd4 0%, #3a1c99 100%);
             color: white;
@@ -94,14 +97,14 @@
             <div class="row mt-4">
                 <div class="col-md-6">
                     <div class="concept-card">
-                        <h4>🌍 Web Tradicional (MVC)</h4>
-                        <p>El servidor envía HTML completo cada vez. Si haces clic, la página se recarga. Es lento para la experiencia de usuario.</p>
+                        <h4>🖥️ Server-side Rendering (SSR)</h4>
+                        <p>La lógica se ejecuta en el <strong>servidor</strong>. El cliente recibe HTML procesado por el servidor. En Blazor Server, esto ocurre en tiempo real vía SignalR, proporcionando una carga inicial veloz.</p>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="concept-card">
-                        <h4>⚡ Blazor Server</h4>
-                        <p>El servidor mantiene una conexión abierta con el navegador. Solo envía las diferencias (diffs) del DOM. Se siente como una app de escritorio.</p>
+                        <h4>💻 Client-side Rendering (CSR)</h4>
+                        <p>La lógica se descarga y ejecuta directamente en el <strong>navegador</strong> del usuario (usando WebAssembly en Blazor). El cliente tiene el control total, permitiendo aplicaciones Offline y menor latencia en la UI.</p>
                     </div>
                 </div>
             </div>
@@ -240,6 +243,64 @@
                     </tr>
                 </tbody>
             </table>
+        </section>
+
+        <!-- Sección 5: Entity Framework Core -->
+        <section class="mb-5">
+            <h2>5. Acceso a Datos con EF Core</h2>
+            <p><strong>Entity Framework (EF) Core</strong> es el ORM (Object-Relational Mapper) oficial de Microsoft. Permite trabajar con bases de datos usando objetos de C# en lugar de escribir SQL manualmente.</p>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="concept-card">
+                        <h5>🛡️ DbContext</h5>
+                        <p>Es el corazón de EF Core. Representa una sesión con la base de datos y se utiliza para consultar y guardar instancias de tus entidades.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="concept-card">
+                        <h5>🚀 Migraciones</h5>
+                        <p>Permiten evolucionar el esquema de la base de datos de forma incremental. Sincronizan tus clases de C# con las tablas de SQL.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <h6>Ejemplo de consulta LINQ en Blazor:</h6>
+<pre><code>// Usando Inyección de Dependencias para obtener el contexto
+var estudiantes = await _context.Estudiantes
+    .Where(e => e.Activo)
+    .ToListAsync();</code></pre>
+            </div>
+        </section>
+
+        <!-- Sección 6: Autenticación y Autorización -->
+        <section class="mb-5">
+            <h2>6. Seguridad: Identity</h2>
+            <p>Blazor utiliza <strong>ASP.NET Core Identity</strong> para gestionar usuarios, contraseñas, perfiles y roles. En proyectos con "Individual Accounts", esto ya viene pre-configurado.</p>
+
+            <div class="row">
+                <div class="col-lg-7">
+                    <h5>Componentes de Seguridad:</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>&lt;AuthorizeView&gt;:</strong> Muestra contenido diferente dependiendo de si el usuario está logueado o no.</li>
+                        <li class="list-group-item"><strong>[Authorize]:</strong> Atributo para proteger páginas enteras, redirigiendo al login si no hay acceso.</li>
+                        <li class="list-group-item"><strong>AuthenticationStateProvider:</strong> El servicio que nos dice QUIÉN es el usuario actual en el circuito SignalR.</li>
+                    </ul>
+                </div>
+                <div class="col-lg-5">
+                    <div class="code-block">
+<pre><code>&lt;AuthorizeView&gt;
+    &lt;Authorized&gt;
+        &lt;p&gt;Hola, @context.User.Identity.Name&lt;/p&gt;
+    &lt;/Authorized&gt;
+    &lt;NotAuthorized&gt;
+        &lt;p&gt;Por favor, inicia sesión.&lt;/p&gt;
+    &lt;/NotAuthorized&gt;
+&lt;/AuthorizeView&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Conclusión -->
