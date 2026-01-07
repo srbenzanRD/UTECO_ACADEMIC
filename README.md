@@ -1,4 +1,4 @@
-# Universidad Tecnologica del Cibao Oriental 
+# Universidad Tecnológica del Cibao Oriental 
 # Programa de clase: Lenguaje de Programación III (IRI-005)
 
 **Asignatura:** Lenguaje de Programación III  
