@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: SQLite + EF Core desde Cero</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --uteco-blue: #004a99;
+            --code-bg: #1e1e1e;
+            --step-number: #512bd4;
+        }
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .header { background: var(--uteco-blue); color: white; padding: 40px 0; border-bottom: 5px solid #ffc107; }
+        .step-card { background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; border-left: 8px solid var(--step-number); shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .step-title { color: var(--step-number); font-weight: bold; margin-bottom: 20px; }
+        
+        /* Consola / Terminal */
+        .terminal { background: #000; color: #00ff00; padding: 15px; border-radius: 8px; font-family: 'Consolas', monospace; margin: 15px 0; }
+        
+        /* Código C# */
+        .code-container {
+            background-color: var(--code-bg);
+            color: #dcdcdc;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .kw { color: #569cd6; } /* Keyword */
+        .typ { color: #4ec9b0; } /* Type */
+        .str { color: #ce9178; } /* String */
+        .co { color: #6a9955; } /* Comment */
+        .at { color: #b5cea8; } /* Attribute */
+    </style>
+</head>
+<body>
+
+    <header class="header text-center">
+        <div class="container">
+            <h1>Guía Práctica: EF Core + SQLite</h1>
+            <p class="lead">Desde Aplicación de Consola hasta la creación de la Base de Datos</p>
+        </div>
+    </header>
+
+    <div class="container my-5">
+
+        <!-- PASO 1 -->
+        <div class="step-card shadow-sm">
+            <h3 class="step-title">1. Crear el Proyecto de Consola</h3>
+            <p>Abre tu terminal (o la terminal integrada en VS Code) y crea un nuevo proyecto de consola de C#:</p>
+            <div class="terminal">
+                dotnet new console -n UtecoConsoleDB <br>
+                cd UtecoConsoleDB
+            </div>
+        </div>
+
+        <!-- PASO 2 -->
+        <div class="step-card shadow-sm">
+            <h3 class="step-title">2. Instalar los paquetes de Entity Framework</h3>
+            <p>Necesitamos tres paquetes esenciales para trabajar con SQLite y permitir las migraciones:</p>
+            <div class="terminal">
+                dotnet add package Microsoft.EntityFrameworkCore.Sqlite <br>
+                dotnet add package Microsoft.EntityFrameworkCore.Design
+            </div>
+        </div>
+
+        <!-- PASO 3 -->
+        <div class="step-card shadow-sm">
+            <h3 class="step-title">3. Definir el Modelo (La Entidad)</h3>
+            <p>Crea un archivo llamado <code>Estudiante.cs</code>. Esta clase representará nuestra tabla en la base de datos.</p>
+            <div class="code-container">
+<span class="kw">using</span> System.ComponentModel.DataAnnotations;<br><br>
+<span class="kw">public class</span> <span class="typ">Estudiante</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[<span class="at">Key</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public int</span> Id { <span class="kw">get</span>; <span class="kw">set</span>; }<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;[<span class="at">Required</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public string</span> Nombre { <span class="kw">get</span>; <span class="kw">set</span>; } = <span class="typ">string</span>.Empty;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public string</span> Matricula { <span class="kw">get</span>; <span class="kw">set</span>; } = <span class="typ">string</span>.Empty;<br>
+}
+            </div>
+        </div>
+
+        <!-- PASO 4 -->
+        <div class="step-card shadow-sm">
+            <h3 class="step-title">4. Crear el DbContext (El Conector)</h3>
+            <p>El <strong>DbContext</strong> es la pieza que comunica nuestro código con SQLite. Crea el archivo <code>AppDbContext.cs</code>:</p>
+            <div class="code-container">
+<span class="kw">using</span> Microsoft.EntityFrameworkCore;<br><br>
+<span class="kw">public class</span> <span class="typ">AppDbContext</span> : <span class="typ">DbContext</span><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="co">// Define la tabla de Estudiantes</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public</span> <span class="typ">DbSet</span>&lt;<span class="typ">Estudiante</span>&gt; Estudiantes { <span class="kw">get</span>; <span class="kw">set</span>; }<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="co">// Configura la conexión a SQLite</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">protected override void</span> OnConfiguring(<span class="typ">DbContextOptionsBuilder</span> options)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options.UseSqlite(<span class="str">"Data Source=UtecoData.db"</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+            </div>
+        </div>
+
+        <!-- PASO 5 -->
+        <div class="step-card shadow-sm">
+            <h3 class="step-title">5. Ejecutar Migraciones (Crear la BD)</h3>
+            <p>Ahora pediremos a .NET que cree el archivo de la base de datos basándose en nuestras clases:</p>
+            <ol>
+                <li>Crea la migración (el plano):</li>
+                <div class="terminal">dotnet ef migrations add MigracionInicial</div>
+                <li>Aplica la migración (construye la BD):</li>
+                <div class="terminal">dotnet ef database update</div>
+            </ol>
+            <div class="alert alert-success">
+                <strong>¡Éxito!</strong> Ahora deberías ver un archivo llamado <code>UtecoData.db</code> en tu carpeta.
+            </div>
+        </div>
+
+        <!-- PASO 6 -->
+        <div class="step-card shadow-sm">
+            <h3 class="step-title">6. Probar en Program.cs</h3>
+            <p>Modifica el archivo <code>Program.cs</code> para insertar un dato y verificar que funcione:</p>
+            <div class="code-container">
+<span class="kw">using</span> <span class="typ">var</span> db = <span class="kw">new</span> <span class="typ">AppDbContext</span>();<br><br>
+<span class="co">// Crear un nuevo estudiante</span><br>
+<span class="typ">var</span> nuevo = <span class="kw">new</span> <span class="typ">Estudiante</span> { Nombre = <span class="str">"Juan Perez"</span>, Matricula = <span class="str">"2024-001"</span> };<br><br>
+<span class="co">// Guardar en la BD</span><br>
+db.Estudiantes.Add(nuevo);<br>
+db.SaveChanges();<br><br>
+<span class="typ">Console</span>.WriteLine(<span class="str">"¡Estudiante guardado en SQLite con éxito!"</span>);
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="text-center py-4 bg-dark text-white">
+        <p>Docente: Félix Benzan | UTECO 2026</p>
+    </footer>
+
+</body>
+</html>
