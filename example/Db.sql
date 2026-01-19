@@ -1,0 +1,14 @@
+CREATE DATABASE Bancotui;
+CREATE TABLE Personas(
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Nombre VARCHAR(100),
+    Apellido VARCHAR(100),
+    Edad INT
+);
+CREATE TABLE Empleados(
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Salario DECIMAL(10,2),
+    PersonaId INT,
+    FOREIGN KEY (PersonaId) 
+    REFERENCES Personas(Id)
+);
