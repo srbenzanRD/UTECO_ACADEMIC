@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Material de Estudio - Semana 3</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      color: #2c3e50;
+      border-bottom: 2px solid #1e7f2e;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #1e7f2e;
+      margin-top: 30px;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      color: #0056b3;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+
+    p {
+      margin-bottom: 15px;
+    }
+
+    .alert {
+      background-color: #e8f5e9;
+      border-left: 5px solid #1e7f2e;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .concept-box {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* Code Block Styling */
+    pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 0.95rem;
+    }
+
+    code {
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    }
+    
+    .keyword { color: #569cd6; }
+    .type { color: #4ec9b0; }
+    .string { color: #ce9178; }
+    .comment { color: #6a9955; }
+    .method { color: #dcdcaa; }
+
+    ul {
+      margin-bottom: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #777;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>📚 Semana 3: El Patrón Repository y LINQ Avanzado</h1>
+
+    <div class="alert">
+      <strong>Objetivo de la Semana:</strong> Aprender a desacoplar la lógica de acceso a datos de nuestra aplicación utilizando el Patrón Repositorio y dominar las consultas avanzadas con LINQ para extraer información eficiente de SQL Server.
+    </div>
+
+    <h2>1. El Patrón Repository (Repositorio)</h2>
+    <div class="concept-box">
+      <p>El <strong>Patrón Repository</strong> actúa como un intermediario entre la capa de dominio (lógica de negocio) y el mapeo de datos (base de datos). Su objetivo principal es aislar la lógica de acceso a datos, haciendo que el resto de la aplicación no dependa directamente de <em>Entity Framework Core</em>.</p>
+    </div>
+
+    <h3>¿Por qué usarlo?</h3>
+    <ul>
+      <li><strong>Desacoplamiento:</strong> Si mañana cambiamos de base de datos o de ORM, solo tocamos el repositorio, no los controladores o componentes.</li>
+      <li><strong>Testabilidad:</strong> Facilita las pruebas unitarias (Unit Testing) al permitir "mockear" (simular) el acceso a datos.</li>
+      <li><strong>Código Limpio:</strong> Evita repetir consultas LINQ complejas en múltiples lugares.</li>
+    </ul>
+
+    <h3>Ejemplo de Implementación</h3>
+    <p>Primero definimos la interfaz (el contrato):</p>
+
+    <pre><code><span class="keyword">public interface</span> <span class="type">IRepository</span>&lt;<span class="type">T</span>&gt; <span class="keyword">where</span> <span class="type">T</span> : <span class="type">class</span>
+{
+    <span class="type">Task</span>&lt;<span class="type">IEnumerable</span>&lt;<span class="type">T</span>&gt;&gt; <span class="method">GetAllAsync</span>();
+    <span class="type">Task</span>&lt;<span class="type">T</span>&gt; <span class="method">GetByIdAsync</span>(<span class="keyword">int</span> id);
+    <span class="type">Task</span> <span class="method">AddAsync</span>(<span class="type">T</span> entity);
+    <span class="type">Task</span> <span class="method">UpdateAsync</span>(<span class="type">T</span> entity);
+    <span class="type">Task</span> <span class="method">DeleteAsync</span>(<span class="keyword">int</span> id);
+}</code></pre>
+
+    <p>Luego implementamos el servicio genérico:</p>
+
+    <pre><code><span class="keyword">public class</span> <span class="type">Repository</span>&lt;<span class="type">T</span>&gt; : <span class="type">IRepository</span>&lt;<span class="type">T</span>&gt; <span class="keyword">where</span> <span class="type">T</span> : <span class="type">class</span>
+{
+    <span class="keyword">private readonly</span> <span class="type">ApplicationDbContext</span> _context;
+    <span class="keyword">private readonly</span> <span class="type">DbSet</span>&lt;<span class="type">T</span>&gt; _dbSet;
+
+    <span class="keyword">public</span> <span class="method">Repository</span>(<span class="type">ApplicationDbContext</span> context)
+    {
+        _context = context;
+        _dbSet = context.Set&lt;<span class="type">T</span>&gt;();
+    }
+
+    <span class="keyword">public async</span> <span class="type">Task</span>&lt;<span class="type">IEnumerable</span>&lt;<span class="type">T</span>&gt;&gt; <span class="method">GetAllAsync</span>()
+    {
+        <span class="keyword">return await</span> _dbSet.ToListAsync();
+    }
+    
+    <span class="comment">// ... implementación del resto de métodos CRUD</span>
+}</code></pre>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+    <h2>2. Consultas Avanzadas con LINQ</h2>
+    <p>LINQ (Language Integrated Query) es la herramienta que usamos en .NET para escribir consultas directamente en C#. Entity Framework traduce esto a SQL.</p>
+
+    <h3>Operadores Esenciales</h3>
+    
+    <h4>A. Filtrado (Where)</h4>
+    <p>Se usa para filtrar registros basados en una condición (equivale al <code>WHERE</code> de SQL).</p>
+    <pre><code><span class="keyword">var</span> estudiantesActivos = _context.Estudiantes
+    .<span class="method">Where</span>(e => e.EstaActivo == <span class="keyword">true</span> && e.Edad > 18)
+    .<span class="method">ToList</span>();</code></pre>
+
+    <h4>B. Proyección (Select)</h4>
+    <p>Se usa para seleccionar solo ciertos datos o transformar el resultado (equivale al <code>SELECT Columna1, Columna2</code> de SQL).</p>
+    <pre><code><span class="keyword">var</span> nombresEstudiantes = _context.Estudiantes
+    .<span class="method">Select</span>(e => <span class="keyword">new</span> { Nombre = e.Nombre, Matricula = e.Matricula })
+    .<span class="method">ToList</span>();</code></pre>
+
+    <h4>C. Carga de Relaciones (Include)</h4>
+    <p>Fundamental en EF Core. Por defecto, las relaciones (ej. Estudiante -> Carrera) son nulas. Usamos <code>Include</code> para hacer un "Eager Loading" (Carga ansiosa/impaciente) y traer los datos relacionados (equivale al <code>JOIN</code> de SQL).</p>
+    <pre><code><span class="keyword">var</span> estudiantesConCarrera = _context.Estudiantes
+    .<span class="method">Include</span>(e => e.Carrera) <span class="comment">// Trae la info de la tabla Carrera</span>
+    .<span class="method">ToList</span>();</code></pre>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+    <h2>3. Guía de Laboratorio (Semana 3)</h2>
+    <p>Para la práctica de esta semana, deberás completar los siguientes pasos en tu proyecto:</p>
+
+    <ol>
+      <li>
+        <strong>Crear la carpeta Services/Repositories:</strong>
+        <p>Organiza tu proyecto. Dentro crea la interfaz <code>IRepository.cs</code>.</p>
+      </li>
+      <li>
+        <strong>Implementar el Repositorio de tu Entidad Principal:</strong>
+        <p>Si tu proyecto es de "Vehículos", crea <code>IVehiculoRepository</code> que herede del genérico (o implemente métodos específicos) y su clase <code>VehiculoRepository</code>.</p>
+      </li>
+      <li>
+        <strong>Inyección de Dependencias:</strong>
+        <p>Registra tus servicios en el <code>Program.cs</code>:</p>
+        <pre><code>builder.Services.<span class="method">AddScoped</span>&lt;<span class="type">IVehiculoRepository</span>, <span class="type">VehiculoRepository</span>&gt;();</code></pre>
+      </li>
+      <li>
+        <strong>Crear Método de Búsqueda:</strong>
+        <p>En tu repositorio, crea un método que reciba un texto y filtre usando LINQ:</p>
+        <pre><code><span class="keyword">public async</span> <span class="type">Task</span>&lt;<span class="type">List</span>&lt;<span class="type">Vehiculo</span>&gt;&gt; <span class="method">BuscarPorMarcaAsync</span>(<span class="keyword">string</span> marca)
+{
+    <span class="keyword">return await</span> _context.Vehiculos
+        .<span class="method">Where</span>(v => v.Marca.<span class="method">Contains</span>(marca))
+        .<span class="method">ToListAsync</span>();
+}</code></pre>
+      </li>
+    </ol>
+
+    <div class="footer">
+      Universidad Tecnológica del Cibao Oriental (UTECO) | Lenguaje de Programación III | Docente: Ing. Félix Benzán
+    </div>
+
+  </div>
+
+</body>
+</html>
