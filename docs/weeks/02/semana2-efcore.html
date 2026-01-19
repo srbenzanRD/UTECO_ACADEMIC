@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --light-bg: #f8f9fa;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 1rem;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .card-topic {
+            border: none;
+            border-left: 5px solid var(--secondary-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .card-topic:hover {
+            transform: translateY(-5px);
+        }
+        .mapping-table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        .badge-custom {
+            background-color: var(--accent-color);
+            font-weight: 500;
+        }
+        .section-title {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container pb-5">
+    <!-- Encabezado -->
+    <header class="header-section">
+        <h1 class="display-4 fw-bold">Semana II: Lenguaje de Programación III</h1>
+        <p class="lead">Entity Framework Core & Patrón ORM (Code First)</p>
+        <span class="badge badge-custom px-3 py-2">TEORÍA Y CONCEPTOS CLAVE</span>
+    </header>
+
+    <!-- 1. El Patrón ORM -->
+    <section class="mb-5">
+        <h2 class="section-title">1. El Patrón ORM (Object-Relational Mapping)</h2>
+        <div class="row">
+            <div class="col-md-7">
+                <p>El <strong>ORM</strong> es una técnica de programación para convertir datos entre sistemas de tipo incompatibles (Objetos en C# vs Tablas en SQL). Actúa como un "traductor" automático que permite interactuar con la base de datos usando código orientado a objetos.</p>
+            </div>
+            <div class="col-md-5">
+                <div class="alert alert-info">
+                    <strong>¿Por qué usarlo?</strong> Evita escribir SQL manual (en su mayoría), reduce errores de sintaxis y acelera el desarrollo.
+                </div>
+            </div>
+        </div>
+
+        <h4 class="mt-4 mb-3">Tabla Comparativa de Mapeo</h4>
+        <div class="table-responsive">
+            <table class="table table-hover mapping-table shadow-sm">
+                <thead>
+                    <tr>
+                        <th>Mundo Orientado a Objetos (C#)</th>
+                        <th>Mundo Relacional (SQL)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Clase (Class)</td>
+                        <td>Tabla (Table)</td>
+                    </tr>
+                    <tr>
+                        <td>Propiedad (Property)</td>
+                        <td>Columna (Column)</td>
+                    </tr>
+                    <tr>
+                        <td>Instancia (Objeto)</td>
+                        <td>Fila / Registro (Row)</td>
+                    </tr>
+                    <tr>
+                        <td>Referencia / Colección</td>
+                        <td>Clave Foránea (FK) / Relación</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 2. Qué es EF Core -->
+    <section class="mb-5">
+        <div class="card card-topic p-4">
+            <h2 class="section-title">2. ¿Qué es Entity Framework (EF) Core?</h2>
+            <p>Es el <strong>ORM oficial de Microsoft</strong> para .NET. Es moderno, ligero, extensible y multiplataforma. EF Core elimina la necesidad de la mayor parte del código de acceso a datos que los desarrolladores suelen tener que escribir.</p>
+            <ul>
+                <li><strong>Soporta:</strong> SQL Server, PostgreSQL, MySQL, SQLite, etc.</li>
+                <li><strong>LINQ:</strong> Permite hacer consultas a la DB usando sintaxis de C#.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 3 y 4. Entidad y DbContext -->
+    <section class="mb-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="section-title">3. ¿Qué es una Entidad?</h2>
+                <p>Es una clase simple (POCO - Plain Old CLR Object) que representa una tabla de la base de datos. Sus propiedades se convertirán en columnas.</p>
+                <div class="code-block">
+                    <span style="color: #c678dd;">public class</span> <span style="color: #e5c07b;">Producto</span><br>
+                    {<br>
+                    &nbsp;&nbsp;<span style="color: #c678dd;">public int</span> Id { <span style="color: #c678dd;">get</span>; <span style="color: #c678dd;">set</span>; }<br>
+                    &nbsp;&nbsp;<span style="color: #c678dd;">public string</span> Nombre { <span style="color: #c678dd;">get</span>; <span style="color: #c678dd;">set</span>; }<br>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2 class="section-title">4. ¿Qué es el DbContext?</h2>
+                <p>Es la <strong>clase principal</strong> que coordina la funcionalidad de EF Core para un modelo de datos. Representa una sesión con la base de datos.</p>
+                <ul>
+                    <li>Gestiona la conexión.</li>
+                    <li>Rastrea cambios en las entidades.</li>
+                    <li>Permite ejecutar <code>SaveChanges()</code>.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Configuración de Reglas -->
+    <section class="mb-5">
+        <h2 class="section-title">5. ¿Cómo configurar las reglas?</h2>
+        <p>A veces las convenciones por defecto no son suficientes. Tenemos dos formas de personalizar el modelo:</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0 bg-light">
+                    <div class="card-body">
+                        <h5 class="fw-bold"><i class="bi bi-tag"></i> 5.1 Data Annotations</h5>
+                        <p class="small">Atributos aplicados directamente en las propiedades de la clase.</p>
+                        <div class="code-block">
+                            [<span style="color: #e5c07b;">Required</span>]<br>
+                            [<span style="color: #e5c07b;">MaxLength</span>(100)]<br>
+                            <span style="color: #c678dd;">public string</span> Nombre { <span style="color: #c678dd;">get</span>; <span style="color: #c678dd;">set</span>; }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0 bg-light">
+                    <div class="card-body">
+                        <h5 class="fw-bold"><i class="bi bi-code-slash"></i> 5.2 Fluent API</h5>
+                        <p class="small">Configuración centralizada en el método <code>OnModelCreating</code> del DbContext. Es más potente que las Data Annotations.</p>
+                        <div class="code-block small">
+                            modelBuilder.Entity&lt;Producto&gt;()<br>
+                            &nbsp;&nbsp;.Property(p => p.Nombre)<br>
+                            &nbsp;&nbsp;.IsRequired()<br>
+                            &nbsp;&nbsp;.HasMaxLength(100);
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Code First -->
+    <section class="mb-5">
+        <div class="p-4 rounded shadow-sm" style="background-color: #e3f2fd; border-left: 10px solid #1976d2;">
+            <h2 class="fw-bold">6. Enfoque Code First</h2>
+            <p>Es el flujo de trabajo donde el código C# es la fuente de verdad. <strong>Primero escribes las clases (Entidades)</strong> y luego Entity Framework genera automáticamente la base de datos y sus tablas mediante un proceso llamado <strong>Migrations</strong>.</p>
+            <div class="mt-3">
+                <span class="badge bg-primary">1. Clases C#</span> &rarr; 
+                <span class="badge bg-primary">2. Migración</span> &rarr; 
+                <span class="badge bg-success">3. Base de Datos</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tarea -->
+    <footer class="mt-5 p-4 bg-dark text-white rounded">
+        <h4 class="text-warning fw-bold">🚀 Tarea de la Semana</h4>
+        <p>Crear el <strong>Diagrama de Entidad-Relación (ER)</strong> de su proyecto individual. Recuerden identificar claramente las Claves Primarias (PK) y Foráneas (FK) antes de pasarlo a código C#.</p>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

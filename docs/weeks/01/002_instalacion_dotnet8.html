@@ -100,8 +100,12 @@
                     <div class="info-card">
                         <h5><span class="os-badge bg-windows">Windows</span> Pasos a seguir:</h5>
                         <ol>
-                            <li>Descarga el <strong>.NET 8 SDK x64</strong> desde <a href="https://dotnet.microsoft.com/download/dotnet/8.0" target="_blank">dotnet.microsoft.com</a>.</li>
-                            <li>Ejecuta el instalador <code>.exe</code> y sigue las instrucciones.</li>
+                            <li>
+                                <strong>Opción Terminal (Recomendado):</strong>
+                                <br>
+                                <code>winget install microsoft.dotnet.sdk.8</code>
+                            </li>
+                            <li><strong>Opción Manual:</strong> Descarga el <strong>.NET 8 SDK x64</strong> desde <a href="https://dotnet.microsoft.com/download/dotnet/8.0" target="_blank">dotnet.microsoft.com</a>. Ejecuta el instalador <code>.exe</code> y sigue las instrucciones.</li>
                             <li>Instala <strong>VS Code</strong>.</li>
                             <li>En VS Code, instala la extensión <strong>C# Dev Kit</strong> (Microsoft).</li>
                         </ol>
@@ -154,12 +158,11 @@ dotnet --version</code></pre>
                 <h4>✅ Verificación de la instalación</h4>
                 <p>Para confirmar que todo está listo, abre una terminal (CMD, PowerShell o Terminal de Linux) y escribe:</p>
                 <div class="code-block" style="max-width: 400px; margin: 10px 0;">
-<pre><code class="language-bash">dotnet --info</code></pre>
+                    <pre><code class="language-bash">dotnet --info</code></pre>
                 </div>
                 <p class="mb-0">Deberías ver una lista detallada que incluya <code>"8.0.xxx"</code> en la sección de SDKs instalados.</p>
             </div>
         </section>
-
     </div>
 
     <footer>
