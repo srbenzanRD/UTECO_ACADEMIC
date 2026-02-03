@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía Práctica - Semana 3</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      color: #2c3e50;
+      border-bottom: 2px solid #1e7f2e;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #1e7f2e;
+      margin-top: 30px;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      color: #0056b3;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+
+    p {
+      margin-bottom: 15px;
+    }
+
+    .alert {
+      background-color: #e8f5e9;
+      border-left: 5px solid #1e7f2e;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .concept-box {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* Code Block Styling */
+    pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 0.95rem;
+    }
+
+    code {
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    }
+
+    .keyword { color: #569cd6; }
+    .type { color: #4ec9b0; }
+    .string { color: #ce9178; }
+    .comment { color: #6a9955; }
+    .method { color: #dcdcaa; }
+
+    ul {
+      margin-bottom: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #777;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>🛠️ Preparemos el entorno para el tema Patrón Repositorio como Servicios</h1>
+
+    <div class="alert">
+      <strong>Objetivo de la Práctica:</strong> Configurar un proyecto Blazor con autenticación para implementar el Patrón Repository como servicios, comenzando con la entidad Estudiante.
+    </div>
+
+    <h2>1. Crear un Nuevo Proyecto Blazor con Autenticación</h2>
+    <div class="concept-box">
+      <p>Crearemos un proyecto Blazor Server con autenticación individual (Cuentas Individuales) en la carpeta correspondiente a tu matrícula.</p>
+    </div>
+
+    <h3>Paso a Paso:</h3>
+    <ol>
+      <li>
+        <strong>Abre la Terminal en VS Code:</strong>
+        <p>Navega a la carpeta raíz de tu matrícula (ej. <code>C:/[TU-MATRICULA]</code>).</p>
+      </li>
+      <li>
+        <strong>Ejecuta el comando para crear el proyecto:</strong>
+        <pre><code>dotnet <span class="keyword">new</span> blazor -n LP3.Server --auth Individual</code></pre>
+        <p>Esto creará un proyecto Blazor Server con autenticación configurada.</p>
+      </li>
+      <li>
+        <strong>Verifica la estructura del proyecto:</strong>
+        <p>Asegúrate de que se haya creado la carpeta <code>LP3.Server</code> con los archivos necesarios, incluyendo <code>Program.cs</code>, <code>ApplicationDbContext.cs</code>, etc.</p>
+      </li>
+    </ol>
+
+    <h2>2. Crear la Entidad Estudiante</h2>
+    <div class="concept-box">
+      <p>Definiremos la entidad Estudiante con los atributos requeridos.</p>
+    </div>
+
+    <h3>Paso a Paso:</h3>
+    <ol>
+      <li>
+        <strong>Crea la carpeta Models:</strong>
+        <p>Dentro de <code>LP3.Server</code>, crea una carpeta llamada <code>Models</code> si no existe.</p>
+      </li>
+      <li>
+        <strong>Crea el archivo Estudiante.cs:</strong>
+        <p>Agrega el siguiente código:</p>
+        <pre><code><span class="keyword">using</span> System;
+<span class="keyword">using</span> System.ComponentModel.DataAnnotations;
+<span class="keyword">using</span> System.ComponentModel.DataAnnotations.Schema;
+
+<span class="keyword">namespace</span> LP3.Server.Models
+{
+    [<span class="type">Table</span>(<span class="string">"Estudiantes"</span>)]
+    <span class="keyword">public class</span> <span class="type">Estudiante</span>
+    {
+        [<span class="type">Key</span>]
+        <span class="keyword">public int</span> Id { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+        <span class="keyword">public string</span> Matricula { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">null</span>!;
+
+        <span class="keyword">public string</span> Nombre { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">null</span>!;
+
+        <span class="keyword">public</span> DateTime? FechaDeNacimiento { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    }
+}</code></pre>
+      </li>
+    </ol>
+
+    <h2>3. Agregar la Entidad al ApplicationDbContext</h2>
+    <div class="concept-box">
+      <p>Integraremos la entidad Estudiante en el contexto de base de datos.</p>
+    </div>
+
+    <h3>Paso a Paso:</h3>
+    <ol>
+      <li>
+        <strong>Localiza ApplicationDbContext.cs:</strong>
+        <p>Generalmente en <code>Data/ApplicationDbContext.cs</code>.</p>
+      </li>
+      <li>
+        <strong>Agrega la DbSet para Estudiante:</strong>
+        <p>Modifica el archivo para incluir:</p>
+        <pre><code><span class="keyword">public class</span> <span class="type">ApplicationDbContext</span> : IdentityDbContext
+{
+    <span class="keyword">public</span> <span class="type">ApplicationDbContext</span>(<span class="type">DbContextOptions</span>&lt;<span class="type">ApplicationDbContext</span>&gt; options)
+        : <span class="keyword">base</span>(options)
+    {
+    }
+
+    <span class="keyword">public</span> <span class="type">DbSet</span>&lt;<span class="type">Estudiante</span>&gt; Estudiantes { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+}</code></pre>
+      </li>
+      <li>
+        <strong>Ejecuta las migraciones:</strong>
+        <pre><code>dotnet ef migrations add InitialCreate
+dotnet ef database update</code></pre>
+      </li>
+    </ol>
+
+    <h2>4. Crear la Carpeta Services y la Clase EstudianteServices.cs</h2>
+    <div class="concept-box">
+      <p>Prepararemos el terreno para implementar el Patrón Repository como servicios.</p>
+    </div>
+
+    <h3>Paso a Paso:</h3>
+    <ol>
+      <li>
+        <strong>Crea la carpeta Services:</strong>
+        <p>Dentro de <code>Data</code>, crea una carpeta llamada <code>Services</code>.</p>
+      </li>
+      <li>
+        <strong>Crea EstudianteServices.cs:</strong>
+        <p>Agrega el siguiente código inicial:</p>
+        <pre><code><span class="keyword">using</span> System.Collections.Generic;
+<span class="keyword">using</span> System.Threading.Tasks;
+<span class="keyword">using</span> LP3.Server.Models;
+<span class="keyword">using</span> Microsoft.EntityFrameworkCore;
+
+<span class="keyword">namespace</span> LP3.Server.Data.Services
+{
+    <span class="keyword">public class</span> <span class="type">EstudianteServices</span>
+    {
+        <span class="keyword">private readonly</span> <span class="type">ApplicationDbContext</span> _context;
+
+        <span class="keyword">public</span> <span class="method">EstudianteServices</span>(<span class="type">ApplicationDbContext</span> context)
+        {
+            _context = context;
+        }
+
+        <span class="comment">// Aquí iniciaremos la implementación del Patrón Repository</span>
+        <span class="keyword">public async</span> <span class="type">Task</span>&lt;<span class="type">List</span>&lt;<span class="type">Estudiante</span>&gt;&gt; <span class="method">GetEstudiantesAsync</span>()
+        {
+            <span class="keyword">return await</span> _context.Estudiantes.ToListAsync();
+        }
+    }
+}</code></pre>
+      </li>
+      <li>
+        <strong>Registra el servicio en Program.cs:</strong>
+        <pre><code>builder.Services.<span class="method">AddScoped</span>&lt;<span class="type">EstudianteServices</span>&gt;();</code></pre>
+      </li>
+    </ol>
+
+    <div class="footer">
+      Universidad Tecnológica del Cibao Oriental (UTECO) | Lenguaje de Programación III | Docente: Lic. Félix Benzán
+    </div>
+
+  </div>
+
+</body>
+</html>
