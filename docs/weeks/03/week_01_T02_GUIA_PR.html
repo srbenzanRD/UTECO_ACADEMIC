@@ -143,7 +143,7 @@
     <ol>
       <li>
         <strong>Crea la carpeta Models:</strong>
-        <p>Dentro de <code>LP3.Server</code>, crea una carpeta llamada <code>Models</code> si no existe.</p>
+        <p>Dentro de <code>Data</code>, crea una carpeta llamada <code>Models</code> si no existe.</p>
       </li>
       <li>
         <strong>Crea el archivo Estudiante.cs:</strong>
@@ -152,7 +152,7 @@
 <span class="keyword">using</span> System.ComponentModel.DataAnnotations;
 <span class="keyword">using</span> System.ComponentModel.DataAnnotations.Schema;
 
-<span class="keyword">namespace</span> LP3.Server.Models
+<span class="keyword">namespace</span> LP3.Server.Data.Models
 {
     [<span class="type">Table</span>(<span class="string">"Estudiantes"</span>)]
     <span class="keyword">public class</span> <span class="type">Estudiante</span>
@@ -183,14 +183,17 @@
       </li>
       <li>
         <strong>Agrega la DbSet para Estudiante:</strong>
-        <p>Modifica el archivo para incluir:</p>
-        <pre><code><span class="keyword">public class</span> <span class="type">ApplicationDbContext</span> : IdentityDbContext
-{
-    <span class="keyword">public</span> <span class="type">ApplicationDbContext</span>(<span class="type">DbContextOptions</span>&lt;<span class="type">ApplicationDbContext</span>&gt; options)
-        : <span class="keyword">base</span>(options)
-    {
-    }
+        <p>Modifica el archivo para que quede así:</p>
+        <pre><code><span class="comment">//Agregar el using para el modelo Estudiante</span>
+<span class="keyword">using</span> LP3.Server.Data.Models;
+<span class="keyword">using</span> Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+<span class="keyword">using</span> Microsoft.EntityFrameworkCore;
 
+<span class="keyword">namespace</span> LP3.Server.Data;
+
+<span class="keyword">public class</span> <span class="type">ApplicationDbContext</span>(<span class="type">DbContextOptions</span>&lt;<span class="type">ApplicationDbContext</span>&gt; options) : IdentityDbContext&lt;<span class="type">ApplicationUser</span>&gt;(options)
+{
+    <span class="comment">//Paso 3: Agregar el DbSet para la entidad Estudiante</span>
     <span class="keyword">public</span> <span class="type">DbSet</span>&lt;<span class="type">Estudiante</span>&gt; Estudiantes { <span class="keyword">get</span>; <span class="keyword">set</span>; }
 }</code></pre>
       </li>
@@ -217,7 +220,7 @@ dotnet ef database update</code></pre>
         <p>Agrega el siguiente código inicial:</p>
         <pre><code><span class="keyword">using</span> System.Collections.Generic;
 <span class="keyword">using</span> System.Threading.Tasks;
-<span class="keyword">using</span> LP3.Server.Models;
+<span class="keyword">using</span> LP3.Server.Data.Models;
 <span class="keyword">using</span> Microsoft.EntityFrameworkCore;
 
 <span class="keyword">namespace</span> LP3.Server.Data.Services
