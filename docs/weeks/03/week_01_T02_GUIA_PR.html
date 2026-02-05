@@ -199,7 +199,10 @@
       </li>
       <li>
         <strong>Ejecuta las migraciones:</strong>
-        <pre><code>dotnet ef migrations add InitialCreate
+        <p>Navega a la carpeta del proyecto y ejecuta:</p>
+        <pre><code>cd LP3.Server
+dotnet tool install --global dotnet-ef
+dotnet ef migrations add InitialCreate
 dotnet ef database update</code></pre>
       </li>
     </ol>
