@@ -1,7 +1,22 @@
 ﻿@page "/"
+@using LP3.Server.Data.Models
+@using LP3.Server.Data.Services
+@inject EstudianteServices EstudianteServices
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+<h3>Estudiantes (@estudiantes.Count)</h3>
+
+@code
+{
+    private List<Estudiante> estudiantes = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        estudiantes = await EstudianteServices.GetEstudiantesAsync();
+    }
+}
