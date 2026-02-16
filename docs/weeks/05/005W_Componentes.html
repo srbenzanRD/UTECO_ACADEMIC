@@ -127,16 +127,40 @@
         }
 
         .code-example {
-            background: #2d2d2d;
+            background: linear-gradient(180deg, #1f1f23 0%, #26262b 100%);
             color: #f8f8f2;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
+            padding: 18px 20px;
+            border-radius: 0 0 10px 10px;
+            margin: 0 0 20px;
             overflow-x: auto;
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 0.95em;
             line-height: 1.5;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            white-space: pre;
+            tab-size: 4;
+            border: 1px solid #3a3a42;
+            border-top: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            scrollbar-width: thin;
+            scrollbar-color: #7c4dff #1f1f23;
+        }
+
+        .code-example::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .code-example::-webkit-scrollbar-track {
+            background: #1f1f23;
+            border-radius: 8px;
+        }
+
+        .code-example::-webkit-scrollbar-thumb {
+            background: #7c4dff;
+            border-radius: 8px;
+        }
+
+        .code-example::-webkit-scrollbar-thumb:hover {
+            background: #9575cd;
         }
 
         .code-example code {
@@ -161,14 +185,17 @@
         }
 
         .code-title {
-            background: #1a1a1a;
-            color: #fff;
+            background: linear-gradient(135deg, #101013 0%, #1f1f24 100%);
+            color: #f1f1f3;
             padding: 10px 20px;
             border-radius: 10px 10px 0 0;
-            margin-bottom: -20px;
+            margin-bottom: 0;
             margin-top: 20px;
             font-weight: bold;
             font-size: 0.9em;
+            border: 1px solid #3a3a42;
+            border-bottom: none;
+            letter-spacing: 0.2px;
         }
 
         .highlight-box {
@@ -328,6 +355,16 @@
 
             .grid-2 {
                 grid-template-columns: 1fr;
+            }
+
+            .code-title {
+                padding: 9px 14px;
+                font-size: 0.85em;
+            }
+
+            .code-example {
+                padding: 14px;
+                font-size: 0.88em;
             }
         }
 
